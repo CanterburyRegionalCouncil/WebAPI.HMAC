@@ -156,7 +156,7 @@ namespace WebAPI.HMAC.Admin.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email ,
-                    AppId = Guid.NewGuid(),
+                    AppId = Guid.NewGuid().ToString("N"),
                     ApiKey = ApiKeyGenerator.Generate()
                 };
 

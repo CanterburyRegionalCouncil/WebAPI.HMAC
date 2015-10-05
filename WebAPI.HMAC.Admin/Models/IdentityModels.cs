@@ -18,7 +18,7 @@ namespace WebAPI.HMAC.Admin.Models
             return userIdentity;
         }
 
-        public Guid AppId { get; set; }
+        public string AppId { get; set; }
         public string ApiKey { get; set; }
     }
 
