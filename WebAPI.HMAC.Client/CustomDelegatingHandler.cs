@@ -24,7 +24,7 @@ namespace WebAPI.HMAC.Client
             var nonce = HMACHelper.BuildNonce();
 
             // Build the base 64 signature.
-            var base64Signature = HMACHelper.BuildBase64Signature(
+            var base64Signature = await HMACHelper.BuildBase64Signature(
                 ApiKey,
                 AppId,
                 request.RequestUri,

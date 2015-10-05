@@ -8,6 +8,7 @@ namespace WebAPI.HMAC.Client
     {
         static void Main(string[] args)
         {
+
             RunAsync().Wait();
         }
 
@@ -15,7 +16,7 @@ namespace WebAPI.HMAC.Client
         {
             Console.WriteLine("Calling the back-end API");
 
-            var apiBaseAddress = "http://localhost:43326/";
+            var apiBaseAddress = "http://localhost:2757/";
 
             var customDelegatingHandler = new CustomDelegatingHandler();
 
