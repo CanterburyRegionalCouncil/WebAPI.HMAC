@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace WebAPI.HMAC.Client
@@ -16,15 +17,14 @@ namespace WebAPI.HMAC.Client
         {
             Console.WriteLine("Calling the back-end API");
 
-            var apiBaseAddress = "http://localhost:2757/";
+            const string appId = "4d53bce03ec34c0a911182d4c228ee6c";
+            const string apiKey = "A93reRTUJHsCuQSHR+L3GxqOJyDmQpCgps102ciuabc=";
 
-            var customDelegatingHandler = new CustomDelegatingHandler();
-
-            var client = HttpClientFactory.Create(customDelegatingHandler);
+            var client = new HMACHttpClient(appId, apiKey);
 
             var order = new Order { OrderId = 10248, CustomerName = "Taiseer Joudeh", ShipperCity = "Amman", IsShipped = true };
 
-            var response = await client.PostAsJsonAsync(apiBaseAddress + "api/orders", order);
+            var response = await client.PostAsJsonAsync("http://localhost:2757/api/orders", order);
 
             if (response.IsSuccessStatusCode)
             {

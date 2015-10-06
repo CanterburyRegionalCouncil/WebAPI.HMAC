@@ -7,11 +7,18 @@ using WebAPI.HMAC.Crypto;
 
 namespace WebAPI.HMAC.Client
 {
-    public class CustomDelegatingHandler : DelegatingHandler
+    public class HMACDelegatingHandler : DelegatingHandler
     {
-        // TODO Should be obtained from the server earlier, APIKey MUST be stored securely e.g. in environment variables.
-        private const string AppId = "4d53bce03ec34c0a911182d4c228ee6c";
-        private const string ApiKey = "A93reRTUJHsCuQSHR+L3GxqOJyDmQpCgps102ciuabc=";
+        private readonly string _appId;
+        private readonly string _apiKey;
+
+        public HMACDelegatingHandler(string appId, string apiKey)
+        {
+            _appId = appId;
+            _apiKey = apiKey;
+
+            InnerHandler = new HttpClientHandler();
+        }
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
@@ -25,8 +32,8 @@ namespace WebAPI.HMAC.Client
 
             // Build the base 64 signature.
             var base64Signature = await HMACHelper.BuildBase64Signature(
-                ApiKey,
-                AppId,
+                _apiKey,
+                _appId,
                 request.RequestUri,
                 request.Method,
                 request.Content,
@@ -36,7 +43,7 @@ namespace WebAPI.HMAC.Client
 
             //Setting the values in the Authorization header using custom scheme (amx)
             request.Headers.Authorization = new AuthenticationHeaderValue("amx",
-                $"{AppId}:{base64Signature}:{nonce}:{requestTimeStamp}");
+                $"{_appId}:{base64Signature}:{nonce}:{requestTimeStamp}");
 
             var response = await base.SendAsync(request, cancellationToken);
 
