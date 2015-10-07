@@ -11,7 +11,7 @@ using System.Web.Http.Filters;
 using System.Web.Http.Results;
 using WebAPI.HMAC.Crypto;
 
-namespace WebAPI.HMAC.API.Filters
+namespace WebAPI.HMAC.Filters
 {
     public class HMACAuthenticationAttribute : Attribute, IAuthenticationFilter
     {

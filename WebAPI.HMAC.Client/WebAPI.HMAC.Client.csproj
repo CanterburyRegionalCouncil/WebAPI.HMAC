@@ -63,9 +63,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebAPI.HMAC.Crypto\WebAPI.HMAC.Crypto.csproj">
-      <Project>{DC322D25-83A7-44EB-944C-9F05CD50BAA3}</Project>
-      <Name>WebAPI.HMAC.Crypto</Name>
+    <ProjectReference Include="..\WebAPI.HMAC\WebAPI.HMAC.csproj">
+      <Project>{ED082584-6078-43B3-9D51-31F2AAF31378}</Project>
+      <Name>WebAPI.HMAC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

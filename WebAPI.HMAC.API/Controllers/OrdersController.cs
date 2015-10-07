@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
-using WebAPI.HMAC.API.Filters;
+using WebAPI.HMAC.Filters;
 
 namespace WebAPI.HMAC.API.Controllers
 {

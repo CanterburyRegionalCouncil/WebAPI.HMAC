@@ -88,7 +88,6 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
-    <Compile Include="Filters\HMACAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -108,9 +107,9 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebAPI.HMAC.Crypto\WebAPI.HMAC.Crypto.csproj">
-      <Project>{DC322D25-83A7-44EB-944C-9F05CD50BAA3}</Project>
-      <Name>WebAPI.HMAC.Crypto</Name>
+    <ProjectReference Include="..\WebAPI.HMAC\WebAPI.HMAC.csproj">
+      <Project>{ed082584-6078-43b3-9d51-31f2aaf31378}</Project>
+      <Name>WebAPI.HMAC</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
