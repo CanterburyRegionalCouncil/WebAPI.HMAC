@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Filters;
 using System.Web.Http.Results;
 using WebAPI.HMAC.Crypto;
+using WebAPI.HMAC.Validator;
 
 namespace WebAPI.HMAC.Filters
 {
@@ -18,6 +19,8 @@ namespace WebAPI.HMAC.Filters
         private static readonly Dictionary<string, string> AllowedApps = new Dictionary<string, string>();
         private const uint RequestMaxAgeInSeconds = 300; //5 mins
         private const string AuthenticationScheme = "amx";
+
+        public IApiKeyValidator ApiKeyValidator { get; set; }
 
         public HMACAuthenticationAttribute()
         {
@@ -30,6 +33,14 @@ namespace WebAPI.HMAC.Filters
 
         public Task AuthenticateAsync(HttpAuthenticationContext context, CancellationToken cancellationToken)
         {
+            ApiKeyValidator = context.Request.GetDependencyScope()
+                .GetService(typeof (IApiKeyValidator)) as IApiKeyValidator;
+
+            if (ApiKeyValidator == null)
+            {
+                throw new NullReferenceException("You must set up your IoC container to inject an implementation of IApiKeyValidator.");
+            }
+
             var request = context.Request;
 
             // Make sure there's an authorisation header and that it uses the correct authorisation scheme.
