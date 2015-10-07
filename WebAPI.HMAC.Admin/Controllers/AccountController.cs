@@ -157,7 +157,7 @@ namespace WebAPI.HMAC.Admin.Controllers
                     UserName = model.Email,
                     Email = model.Email ,
                     AppId = Guid.NewGuid().ToString("N"),
-                    ApiKey = ApiKeyGenerator.Generate()
+                    ApiKey = ApiKeyGenerator.Generate(32)
                 };
 
                 var result = await UserManager.CreateAsync(user, model.Password);

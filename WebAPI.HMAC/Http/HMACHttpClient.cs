@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace WebAPI.HMAC.Client
+namespace WebAPI.HMAC.Http
 {
     public class HMACHttpClient : HttpClient
     {

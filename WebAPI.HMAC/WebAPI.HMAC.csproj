@@ -49,6 +49,8 @@
     <Compile Include="Crypto\ApiKeyGenerator.cs" />
     <Compile Include="Crypto\HMACHelper.cs" />
     <Compile Include="Filters\HMACAuthenticationAttribute.cs" />
+    <Compile Include="Http\HMACDelegatingHandler.cs" />
+    <Compile Include="Http\HMACHttpClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

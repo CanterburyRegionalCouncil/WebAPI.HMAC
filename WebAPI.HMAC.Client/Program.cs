@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using WebAPI.HMAC.Http;
 
 namespace WebAPI.HMAC.Client
 {

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WebAPI.HMAC.Crypto;
 
-namespace WebAPI.HMAC.Client
+namespace WebAPI.HMAC.Http
 {
     public class HMACDelegatingHandler : DelegatingHandler
     {
