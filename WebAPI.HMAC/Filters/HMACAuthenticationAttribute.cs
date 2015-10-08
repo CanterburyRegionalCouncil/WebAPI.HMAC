@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -10,35 +9,22 @@ using System.Web.Http;
 using System.Web.Http.Filters;
 using System.Web.Http.Results;
 using WebAPI.HMAC.Crypto;
-using WebAPI.HMAC.Validator;
+using WebAPI.HMAC.Store;
 
 namespace WebAPI.HMAC.Filters
 {
     public class HMACAuthenticationAttribute : Attribute, IAuthenticationFilter
     {
-        private static readonly Dictionary<string, string> AllowedApps = new Dictionary<string, string>();
         private const uint RequestMaxAgeInSeconds = 300; //5 mins
         private const string AuthenticationScheme = "amx";
 
-        public IApiKeyValidator ApiKeyValidator { get; set; }
-
-        public HMACAuthenticationAttribute()
-        {
-            // TODO Get this list from the database. Maybe cache it for X amount of time.
-            if (AllowedApps.Count == 0)
-            {
-                AllowedApps.Add("4d53bce03ec34c0a911182d4c228ee6c", "A93reRTUJHsCuQSHR+L3GxqOJyDmQpCgps102ciuabc=");
-            }
-        }
+        public IApiKeyStore ApiKeyStore { get; set; }
 
         public Task AuthenticateAsync(HttpAuthenticationContext context, CancellationToken cancellationToken)
         {
-            ApiKeyValidator = context.Request.GetDependencyScope()
-                .GetService(typeof (IApiKeyValidator)) as IApiKeyValidator;
-
-            if (ApiKeyValidator == null)
+            if (ApiKeyStore == null)
             {
-                throw new NullReferenceException("You must set up your IoC container to inject an implementation of IApiKeyValidator.");
+                throw new NullReferenceException("ApiKeyStore is null. You must set up your IoC container to inject an implementation of IApiKeyStore via property injection.");
             }
 
             var request = context.Request;
@@ -66,8 +52,6 @@ namespace WebAPI.HMAC.Filters
                     var isValid = IsValidRequest(request, appId, incomingBase64Signature, nonce, requestTimeStamp);
 
                     // If the request is valid, set a generic principal.
-                    // This would be the place to build in the roles.
-                    // Use identity to get roles based on user attached to app ID.
                     if (isValid.Result)
                     {
                         var currentPrincipal = new GenericPrincipal(new GenericIdentity(appId), null);
@@ -106,15 +90,17 @@ namespace WebAPI.HMAC.Filters
             return credArray.Length == 4 ? credArray : null;
         }
 
-        private static async Task<bool> IsValidRequest(
+        private async Task<bool> IsValidRequest(
             HttpRequestMessage req, 
             string appId, 
             string incomingBase64Signature, 
             string nonce, 
             string requestTimeStamp)
         {
-            // Check if the app ID provided is allowed to access the API period.
-            if (!AllowedApps.ContainsKey(appId))
+            var apiKey = ApiKeyStore.GetApiKey(appId);
+
+            // Check if the app ID provided returned an API key.
+            if (apiKey == null)
             {
                 return false;
             }
@@ -127,7 +113,7 @@ namespace WebAPI.HMAC.Filters
 
             // Rebuild the base 64 signature.
             var rebuiltbase64Signature = await HMACHelper.BuildBase64Signature(
-                AllowedApps[appId],
+                apiKey,
                 appId,
                 req.RequestUri,
                 req.Method,
@@ -168,7 +154,6 @@ namespace WebAPI.HMAC.Filters
 
     public class ResultWithChallenge : IHttpActionResult
     {
-        // TODO Could put this in the config file somewhere.
         private const string AuthenticationScheme = "amx";
         private readonly IHttpActionResult _next;
 
