@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/SamStrong/WebAPI.HMAC</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A package to assist in the implementation of HMAC security in ASP.Net Web API.</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
+    <releaseNotes>Initial release.</releaseNotes>
     <copyright>Copyright 2015</copyright>
     <tags>ASP.Net Web API HMAC Security</tags>
   </metadata>
