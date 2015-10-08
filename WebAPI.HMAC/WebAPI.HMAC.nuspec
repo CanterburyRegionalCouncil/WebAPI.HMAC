@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>$id$</id>
+    <id>WebAPI.HMAC</id>
     <version>$version$</version>
-    <title>$title$</title>
+    <title>WebAPI.HMAC</title>
     <authors>Sam Strong</authors>
     <owners>Sam Strong</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
