@@ -4,8 +4,8 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>$author$</authors>
-    <owners>$author$</owners>
+    <authors>Sam Strong</authors>
+    <owners>Sam Strong</owners>
     <licenseUrl>http://choosealicense.com/licenses/mit/</licenseUrl>
     <projectUrl>https://github.com/SamStrong/WebAPI.HMAC</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
