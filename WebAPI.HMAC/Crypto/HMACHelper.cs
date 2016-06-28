@@ -61,10 +61,13 @@ namespace WebAPI.HMAC.Crypto
             using (var md5 = MD5.Create())
             {
                 byte[] hash = null;
-                var content = await httpContent.ReadAsByteArrayAsync();
-                if (content.Length != 0)
+                if (httpContent != null)
                 {
-                    hash = md5.ComputeHash(content);
+                    var content = await httpContent.ReadAsByteArrayAsync();
+                    if (content.Length != 0)
+                    {
+                        hash = md5.ComputeHash(content);
+                    }
                 }
                 return hash;
             }
