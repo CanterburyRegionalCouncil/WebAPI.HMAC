@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -63,7 +64,11 @@ namespace WebAPI.HMAC.Crypto
                 byte[] hash = null;
                 if (httpContent != null)
                 {
-                    var content = await httpContent.ReadAsByteArrayAsync();
+                    var ms = new MemoryStream();
+                    await httpContent.CopyToAsync(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
+
+                    var content = ms.ToArray();
                     if (content.Length != 0)
                     {
                         hash = md5.ComputeHash(content);
