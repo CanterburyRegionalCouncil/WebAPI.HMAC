@@ -30,7 +30,7 @@ namespace WebAPI.HMAC.Filters
             var request = context.Request;
 
             // Make sure there's an authorisation header and that it uses the correct authorisation scheme.
-            if (request.Headers.Authorization != null && 
+            if (request.Headers.Authorization != null &&
                 AuthenticationScheme.Equals(request.Headers.Authorization.Scheme, StringComparison.OrdinalIgnoreCase))
             {
                 // Gets the raw auth header.
@@ -52,7 +52,7 @@ namespace WebAPI.HMAC.Filters
                     var isValid = IsValidRequest(request, appId, incomingBase64Signature, nonce, requestTimeStamp);
 
                     // If the request is valid, set a generic principal.
-                    if (isValid.Result)
+                    if (isValid)
                     {
                         var currentPrincipal = new GenericPrincipal(new GenericIdentity(appId), null);
                         context.Principal = currentPrincipal;
@@ -90,11 +90,11 @@ namespace WebAPI.HMAC.Filters
             return credArray.Length == 4 ? credArray : null;
         }
 
-        private async Task<bool> IsValidRequest(
-            HttpRequestMessage req, 
-            string appId, 
-            string incomingBase64Signature, 
-            string nonce, 
+        private bool IsValidRequest(
+            HttpRequestMessage req,
+            string appId,
+            string incomingBase64Signature,
+            string nonce,
             string requestTimeStamp)
         {
             var apiKey = ApiKeyStore.GetApiKey(appId);
@@ -112,7 +112,7 @@ namespace WebAPI.HMAC.Filters
             }
 
             // Rebuild the base 64 signature.
-            var rebuiltbase64Signature = await HMACHelper.BuildBase64Signature(
+            var rebuiltbase64Signature = HMACHelper.BuildBase64Signature(
                 apiKey,
                 appId,
                 req.RequestUri,
@@ -121,7 +121,7 @@ namespace WebAPI.HMAC.Filters
                 nonce,
                 requestTimeStamp
                 );
- 
+
             // Check if the signatures match.
             return (incomingBase64Signature.Equals(rebuiltbase64Signature, StringComparison.Ordinal));
         }

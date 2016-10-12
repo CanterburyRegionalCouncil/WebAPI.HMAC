@@ -27,7 +27,7 @@ namespace WebAPI.HMAC.Http
             var timeSpan = DateTime.UtcNow - epochStart;
             var requestTimeStamp = Convert.ToUInt64(timeSpan.TotalSeconds).ToString();
 
-            //create random nonce for each request
+            // Create random nonce for each request
             var nonce = HMACHelper.BuildNonce();
 
             // Build the base 64 signature.
@@ -39,9 +39,9 @@ namespace WebAPI.HMAC.Http
                 request.Content,
                 nonce,
                 requestTimeStamp
-            ).Result;
+            );
 
-            //Setting the values in the Authorization header using custom scheme (amx)
+            // Setting the values in the Authorization header using custom scheme (amx)
             request.Headers.Authorization = new AuthenticationHeaderValue("amx",
                 $"{_appId}:{base64Signature}:{nonce}:{requestTimeStamp}");
 
