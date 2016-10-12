@@ -3,7 +3,6 @@ using System.IO;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace WebAPI.HMAC.Crypto
@@ -15,7 +14,7 @@ namespace WebAPI.HMAC.Crypto
             return Guid.NewGuid().ToString("N");
         }
 
-        public async static Task<string> BuildBase64Signature(
+        public static string BuildBase64Signature(
                 string apiKey,
                 string appId,
                 Uri rawUri,
@@ -29,11 +28,11 @@ namespace WebAPI.HMAC.Crypto
             var requestHttpMethod = httpMethod.Method;
 
             // Get the content string out of the content.
-            var requestContentBase64String = await ComputeBase64RequestContent(content);
+            string requestContentBase64String = ComputeBase64RequestContent(content);
 
             // Rebuild the signature raw data.
             var signatureRawData =
-                $"{appId}{requestHttpMethod}{requestUri}{requestTimeStamp}{nonce}{requestContentBase64String}";
+            $"{appId}{requestHttpMethod}{requestUri}{requestTimeStamp}{nonce}{requestContentBase64String}";
 
             // Get the api key bytes.
             var secretKeyBytes = Convert.FromBase64String(apiKey);
@@ -48,16 +47,16 @@ namespace WebAPI.HMAC.Crypto
             }
         }
 
-        private async static Task<string> ComputeBase64RequestContent(HttpContent httpContent)
+        private static string ComputeBase64RequestContent(HttpContent httpContent)
         {
             // Hash the request content.
-            var hash = await ComputeHash(httpContent);
+            var hash = ComputeHash(httpContent);
 
             // If the result is not null then convert it into a base 64 string.
             return hash != null ? Convert.ToBase64String(hash) : string.Empty;
         }
 
-        private static async Task<byte[]> ComputeHash(HttpContent httpContent)
+        private static byte[] ComputeHash(HttpContent httpContent)
         {
             using (var md5 = MD5.Create())
             {
@@ -65,7 +64,7 @@ namespace WebAPI.HMAC.Crypto
                 if (httpContent != null)
                 {
                     var ms = new MemoryStream();
-                    await httpContent.CopyToAsync(ms);
+                    httpContent.CopyToAsync(ms).Wait();
                     ms.Seek(0, SeekOrigin.Begin);
 
                     var content = ms.ToArray();
