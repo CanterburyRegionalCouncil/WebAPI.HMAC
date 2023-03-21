@@ -1,4 +1,6 @@
-#WebAPI.HMAC
+# WebAPI.HMAC
+
+### This project has been archived and is no longer maintained.
 
 Implementing a secure ASP.Net Web API application using HMAC security.
 
